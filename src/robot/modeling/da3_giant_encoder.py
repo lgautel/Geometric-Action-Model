@@ -28,7 +28,9 @@ try:
         flex_attention as _flex_attention_raw,
         create_block_mask as _create_block_mask,
     )
-    _flex_attention = torch.compile(_flex_attention_raw)
+    # dynamic=True required for variable batch sizes in batched LIBERO eval.
+    # _flex_attention = torch.compile(_flex_attention_raw) @#??? 感觉这个错应该有其它解法
+    _flex_attention = _flex_attention_raw  # liberopls: skip torch.compile to avoid batch-dim inductor failures
     _HAS_FLEX_ATTENTION = True
 except Exception:
     _flex_attention = None

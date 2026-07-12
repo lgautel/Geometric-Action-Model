@@ -84,7 +84,10 @@ try:
     # flex_attention must itself be compiled to use the fused BlockMask kernel.
     # A model-level torch.compile can graph-break before this call and silently
     # fall back to the dense-score eager path, which is both slow and memory hot.
-    _flex_attention = torch.compile(_flex_attention_raw)
+    # dynamic=True: batched LIBERO eval varies batch size across steps;
+    # dynamic=False trips inductor "Batch dimension must match" and zeros SR.
+    # _flex_attention = torch.compile(_flex_attention_raw) @#??? 感觉这个错应该有其它解法
+    _flex_attention = _flex_attention_raw  # liberopls: skip torch.compile to avoid batch-dim inductor failures
     _HAS_FLEX = True
 except Exception:
     _flex_attention = None

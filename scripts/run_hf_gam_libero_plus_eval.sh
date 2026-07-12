@@ -362,8 +362,8 @@ EOF
         --max-wait-time "$MAX_WAIT_TIME" \
         --env-cache-size "$ENV_CACHE_SIZE" \
         --env-process-isolation \
-        --env-worker-timeout-sec 900 \
-        --rollout-wall-timeout-sec 900 \
+        --env-worker-timeout-sec "${ENV_WORKER_TIMEOUT_SEC:-1800}" \
+        --rollout-wall-timeout-sec "${ROLLOUT_WALL_TIMEOUT_SEC:-1800}" \
         --shard-index "$shard_idx" \
         --shard-count "$shard_count" \
         --run-name "$shard_name" \
